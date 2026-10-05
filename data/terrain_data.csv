@@ -1,0 +1,9 @@
+zone_id,location_name,elevation_m,slope_degree,drainage_capacity_index,flood_prone_classification,soil_absorption_index
+Z01,Nagpur Central (Sitabuldi),310,2.5,0.6,Urban Concrete Basin,0.35
+Z02,Kamptee Flood Plain (Kanhan River),275,0.8,0.3,Lowland River Floodplain,0.25
+Z03,Nagpur South (Besa / Manewada),298,1.8,0.4,Suburban Lowland,0.4
+Z04,Hingna Industrial Belt,290,1.2,0.45,Industrial Water Retention Basin,0.3
+Z05,Ambazari Lake Catchment Zone,315,3.2,0.35,Reservoir Overflow Catchment,0.3
+Z06,Ramtek Hill Basin,345,8.5,0.7,Upland Watershed Basin,0.65
+Z07,Nagpur North (Pili River Floodplain),288,1.0,0.35,Lowland River Floodplain,0.28
+Z08,Wadi Western Ridge,330,6.0,0.75,High Ridge Slope,0.7

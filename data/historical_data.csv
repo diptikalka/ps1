@@ -1,0 +1,9 @@
+zone_id,zone_name,historical_flood_frequency_per_decade,max_historical_rainfall_mm,past_disaster_events_count,historical_vulnerability_score
+Z01,Nagpur Central (Sitabuldi),4,210.0,2,0.5
+Z02,Kamptee Flood Plain (Kanhan River),11,320.0,7,0.9
+Z03,Nagpur South (Besa / Manewada),6,240.0,3,0.65
+Z04,Hingna Industrial Belt,5,225.0,3,0.58
+Z05,Ambazari Lake Catchment Zone,9,295.0,6,0.82
+Z06,Ramtek Hill Basin,2,180.0,1,0.3
+Z07,Nagpur North (Pili River Floodplain),10,310.0,6,0.88
+Z08,Wadi Western Ridge,1,165.0,0,0.2

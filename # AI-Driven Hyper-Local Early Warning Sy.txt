@@ -1,0 +1,15 @@
+# AI-Driven Hyper-Local Early Warning System | National Disaster Intelligence Platform
+
+
+# AI-Driven Hyper-Local Early Warning System
+Multi-Source Disaster Risk Intelligence Platform
+
+### ⚠ HIGH RISK ALERT
+
+#### Recommended Actions:
+- Monitor official warnings and avoid low-lying flood-prone roads.
+- Issue automated SMS & siren broadcast to Ward Response Officers.
+- Deploy high-capacity mobile storm-water drainage pumps.
+- Prepare low-lying community evacuation shelters.
+“AI analysis indicates increasing rainfall intensity and high accumulated rainfall in a low-elevation catchment basin are the primary risk contributors.”
+AI-Driven Hyper-Local Early Warning System • Multi-Source Risk Intelligence Platform

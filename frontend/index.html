@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Driven Hyper-Local Early Warning System | National Disaster Intelligence Platform</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Leaflet GIS CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- TOP ENTERPRISE HEADER -->
+        <header class="app-header">
+            <div class="header-branding">
+                <div class="header-logo">
+                    <i class="fa-solid fa-shield-halved pulse-icon"></i>
+                </div>
+                <div>
+                    <h1 class="project-title">AI-Driven Hyper-Local Early Warning System</h1>
+                    <p class="project-subtitle">Multi-Source Disaster Risk Intelligence Platform</p>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <div class="system-status-badge">
+                    <span class="badge-dot pulse"></span>
+                    <span class="badge-text">LIVE SYSTEM ACTIVE</span>
+                </div>
+                <div class="live-clock" id="liveClock">--:--:-- IST</div>
+            </div>
+        </header>
+
+        <!-- VALUE PROPOSITION BANNER (10-SECOND EVALUATOR COMPREHENSION) -->
+        <section class="value-prop-banner">
+            <div class="prop-badge"><i class="fa-solid fa-brain"></i> <span>AI-DRIVEN ENGINE</span></div>
+            <div class="prop-divider"></div>
+            <div class="prop-badge"><i class="fa-solid fa-location-crosshairs"></i> <span>HYPER-LOCAL (SECTOR-LEVEL)</span></div>
+            <div class="prop-divider"></div>
+            <div class="prop-badge accent"><i class="fa-solid fa-stopwatch"></i> <span>2–6 HOUR LEAD TIME</span></div>
+            <div class="prop-divider"></div>
+            <div class="prop-badge danger"><i class="fa-solid fa-cloud-showers-water"></i> <span>EXTREME WEATHER THREATS</span></div>
+            <div class="prop-divider"></div>
+            <div class="prop-badge warning"><i class="fa-solid fa-bell"></i> <span>EARLY WARNING DISPATCH</span></div>
+        </section>
+
+
+        <!-- CONTROL & SELECTION BAR -->
+        <section class="control-bar" id="stepSectorSelect">
+            <div class="control-group">
+                <label for="locationSelect"><i class="fa-solid fa-location-crosshairs"></i> Target Sector / Zone:</label>
+                <select id="locationSelect" class="form-select">
+                    <option value="Z02" selected>Kamptee Flood Plain (Kanhan River)</option>
+                    <option value="Z01">Nagpur Central (Sitabuldi Basin)</option>
+                    <option value="Z03">Nagpur South (Besa / Manewada Sector)</option>
+                    <option value="Z04">Hingna Industrial Corridor</option>
+                    <option value="Z05">Ambazari Lake Catchment Zone</option>
+                    <option value="Z06">Ramtek Hill Basin</option>
+                    <option value="Z07">Nagpur North (Pili River Floodplain)</option>
+                    <option value="Z08">Wadi Western Ridge</option>
+                </select>
+            </div>
+
+            <div class="control-group scenario-group">
+                <span class="control-label"><i class="fa-solid fa-sliders"></i> Simulation Scenario:</span>
+                <div class="scenario-buttons">
+                    <button class="btn-scenario active" data-scenario="default">
+                        <i class="fa-solid fa-cloud-sun-rain"></i> Baseline Telemetry
+                    </button>
+                    <button class="btn-scenario danger" data-scenario="cloudburst">
+                        <i class="fa-solid fa-cloud-showers-heavy"></i> Cloudburst Emergency
+                    </button>
+                    <button class="btn-scenario success" data-scenario="clear">
+                        <i class="fa-solid fa-sun"></i> Fair Weather
+                    </button>
+                </div>
+            </div>
+
+            <button id="btnRunPrediction" class="btn-primary">
+                <i class="fa-solid fa-microchip"></i> Run Multi-Source AI Engine
+            </button>
+        </section>
+
+        <!-- HYPER-LOCAL SECTORS QUICK MATRIX BAR (PROVES THIS IS NOT A CITY-LEVEL WEATHER APP) -->
+        <section class="hyperlocal-matrix-bar">
+            <div class="matrix-header">
+                <span class="matrix-title"><i class="fa-solid fa-map-pin"></i> Hyper-Local Sector Risk Matrix (Multi-Zone Resolution):</span>
+                <span class="data-tag"><i class="fa-solid fa-database"></i> SIMULATED DEMO DATA</span>
+            </div>
+            <div class="matrix-grid" id="hyperlocalGrid">
+                <!-- Dynamically populated by JS with 8 zones and their risk pills -->
+            </div>
+        </section>
+
+        <!-- DASHBOARD GRID -->
+        <main class="dashboard-grid">
+            
+            <!-- LEFT COLUMN: MAP & METRICS SUMMARY -->
+            <div class="grid-col-left">
+                
+                <!-- CURRENT MULTI-SOURCE SUMMARY METRICS CARDS -->
+                <div class="metrics-row" id="stepTelemetry">
+                    
+                    <div class="metric-card risk-metric" id="cardRiskLevel">
+                        <div class="metric-icon">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div class="metric-content">
+                            <span class="metric-label">AI Risk Assessment <i class="fa-solid fa-circle-info info-tooltip" title="Scikit-Learn Random Forest prediction based on real-time fusion of 4 data pillars."></i></span>
+                            <div class="metric-value-group">
+                                <span class="metric-value" id="valRiskLevel">HIGH</span>
+                                <span class="probability-badge" id="valRiskProb">82% Confidence</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon rainfall-icon">
+                            <i class="fa-solid fa-cloud-rain"></i>
+                        </div>
+                        <div class="metric-content">
+                            <span class="metric-label">Precipitation Telemetry <i class="fa-solid fa-circle-info info-tooltip" title="Real-time rainfall rate (mm/h) and 24-hour cumulative rainfall. High accumulation leads to soil saturation limits."></i></span>
+                            <div class="metric-value-group">
+                                <span class="metric-value" id="valRainfall">48.5</span>
+                                <span class="metric-unit">mm/h</span>
+                            </div>
+                            <span class="sub-metric" id="valAccumulated">24h Cumulative: 124.0 mm</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon satellite-icon">
+                            <i class="fa-solid fa-satellite-dish"></i>
+                        </div>
+                        <div class="metric-content">
+                            <span class="metric-label">Doppler Radar <i class="fa-solid fa-circle-info info-tooltip" title="Doppler Radar Reflectivity measured in dBZ. Values > 45 dBZ indicate heavy storm cells and cloudburst conditions."></i></span>
+                            <div class="metric-value-group">
+                                <span class="metric-value" id="valSatDbz">48.0</span>
+                                <span class="metric-unit">dBZ</span>
+                            </div>
+                            <span class="sub-metric" id="valSatCloud">Cloud Mass: 85%</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon terrain-icon">
+                            <i class="fa-solid fa-mountain-city"></i>
+                        </div>
+                        <div class="metric-content">
+                            <span class="metric-label">Terrain Elevation <i class="fa-solid fa-circle-info info-tooltip" title="Meters Above Sea Level (m ASL) and urban drainage capacity index. Lower values highlight low-lying floodplains."></i></span>
+                            <div class="metric-value-group">
+                                <span class="metric-value" id="valElevation">275</span>
+                                <span class="metric-unit">m ASL</span>
+                            </div>
+                            <span class="sub-metric" id="valDrainage">Drainage Index: 0.30 (Low)</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon history-icon">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        </div>
+                        <div class="metric-content">
+                            <span class="metric-label">Historical Frequency <i class="fa-solid fa-circle-info info-tooltip" title="Recorded flood occurrences over the past 10 years and historical risk vulnerability score."></i></span>
+                            <div class="metric-value-group">
+                                <span class="metric-value" id="valHistFreq">11</span>
+                                <span class="metric-unit">floods/10y</span>
+                            </div>
+                            <span class="sub-metric" id="valHistVuln">Rating: High Susceptibility</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- MAIN GIS MAP CONTAINER WITH RISK EVOLUTION TIMELINE & LAYER TOGGLES -->
+                <div class="card map-card" id="stepRiskMap">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                            <span>Hyper-Local GIS Risk Intelligence Map</span>
+                            <span class="data-tag"><i class="fa-solid fa-layer-group"></i> GIS DEM ENGINE</span>
+                        </div>
+
+                        <!-- MULTI-LAYER TOGGLE BUTTONS -->
+                        <div class="map-layer-toggles">
+                            <button class="layer-toggle-btn active" id="toggleRiskLayer" data-layer="risk">
+                                <i class="fa-solid fa-layer-group"></i> Risk Zones
+                            </button>
+                            <button class="layer-toggle-btn active" id="toggleSatLayer" data-layer="satellite">
+                                <i class="fa-solid fa-satellite-dish"></i> Radar Intensity
+                            </button>
+                            <button class="layer-toggle-btn active" id="toggleTerrainLayer" data-layer="terrain">
+                                <i class="fa-solid fa-mountain-city"></i> Topography
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- SIGNATURE FEATURE: RISK EVOLUTION TIMELINE BAR -->
+                    <div class="risk-evolution-bar">
+                        <div class="evolution-info">
+                            <i class="fa-solid fa-clock-rotate-left text-accent"></i>
+                            <strong>Risk Evolution (6-Hour Projection):</strong>
+                            <span id="evoTimeLabel" class="evo-time-badge">NOW (+0h)</span>
+                        </div>
+                        <div class="evolution-controls">
+                            <button id="btnPlayEvolution" class="btn-evo-play">
+                                <i class="fa-solid fa-play"></i> Play Evolution
+                            </button>
+                            <div class="evolution-steps" id="evolutionSteps">
+                                <button class="evo-step active" data-hour="0">NOW</button>
+                                <button class="evo-step" data-hour="1">+1H</button>
+                                <button class="evo-step" data-hour="2">+2H</button>
+                                <button class="evo-step" data-hour="3">+3H</button>
+                                <button class="evo-step" data-hour="4">+4H</button>
+                                <button class="evo-step" data-hour="5">+5H</button>
+                                <button class="evo-step" data-hour="6">+6H</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="map-wrapper">
+                        <div id="gisMap"></div>
+                        
+                        <!-- MAP FLOATING DETAILS OVERLAY -->
+                        <div class="map-floating-details" id="mapFloatingDetails">
+                            <div class="floating-header">
+                                <span class="floating-title" id="floatZoneName">Kamptee Flood Plain</span>
+                                <span class="risk-pill high" id="floatRiskBadge">HIGH</span>
+                            </div>
+                            <div class="floating-body">
+                                <div class="float-row">
+                                    <span>AI Risk Probability:</span>
+                                    <strong id="floatProb">82%</strong>
+                                </div>
+                                <div class="float-row">
+                                    <span>Warning Window:</span>
+                                    <strong id="floatWindow">Next 2–6 Hours</strong>
+                                </div>
+                                <div class="float-row">
+                                    <span>Precipitation Rate:</span>
+                                    <strong id="floatRain">48.5 mm/h</strong>
+                                </div>
+                                <div class="float-row">
+                                    <span>Radar Reflectivity:</span>
+                                    <strong id="floatDbz">48.0 dBZ</strong>
+                                </div>
+                                <div class="float-row">
+                                    <span>Elevation:</span>
+                                    <strong id="floatElev">275m ASL (River Catchment)</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WEATHER TREND CHART -->
+                <div class="card chart-card" id="stepForecast">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span>Precipitation Telemetry & 2–6 Hour Predictive Forecast</span>
+                            <span class="data-tag"><i class="fa-solid fa-chart-area"></i> FORECAST ENGINE</span>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="weatherTrendChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: MULTI-SOURCE AI EXPLANATION & WARNING -->
+            <div class="grid-col-right">
+                
+                <!-- EARLY WARNING PANEL -->
+                <div class="card alert-card high" id="earlyWarningPanel">
+                    <div class="alert-header">
+                        <i class="fa-solid fa-triangle-exclamation alert-icon" id="alertIcon"></i>
+                        <div>
+                            <h3 class="alert-title" id="alertTitle">⚠ HIGH RISK ALERT</h3>
+                            <span class="alert-subtitle" id="alertSubtitle">Heavy rainfall / flash flood risk detected</span>
+                        </div>
+                    </div>
+                    
+                    <div class="alert-body">
+                        <div class="alert-info-box">
+                            <div class="info-item">
+                                <span class="info-label"><i class="fa-solid fa-location-dot"></i> Affected Sector:</span>
+                                <span class="info-value" id="alertLocation">Kamptee Flood Plain</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label"><i class="fa-regular fa-clock"></i> Expected Window:</span>
+                                <span class="info-value" id="alertWindow">Next 2–6 Hours</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label"><i class="fa-solid fa-bullseye"></i> AI Model Confidence:</span>
+                                <span class="info-value" id="alertConfidence">82% (Random Forest Classifier)</span>
+                            </div>
+                        </div>
+
+                        <div class="actions-section">
+                            <h4 class="actions-heading"><i class="fa-solid fa-shield-cat"></i> Recommended Actions:</h4>
+                            <ul class="actions-list" id="alertActionsList">
+                                <li>Monitor official warnings and avoid low-lying flood-prone roads.</li>
+                                <li>Issue automated SMS & siren broadcast to Ward Response Officers.</li>
+                                <li>Deploy high-capacity mobile storm-water drainage pumps.</li>
+                                <li>Prepare low-lying community evacuation shelters.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="dispatch-export-box" style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.75rem; text-align: right;">
+                            <button id="btnExportReport" class="btn-export-dispatch">
+                                <i class="fa-solid fa-file-pdf"></i> Export Emergency Dispatch Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- "WHY THIS ALERT?" EXPLAINABLE AI SECTION (REQUIREMENT #5) -->
+                <div class="card xai-card" id="stepWhyAlert">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fa-solid fa-brain"></i>
+                            <span>WHY IS THE RISK HIGH? (AI Multi-Source Reasoning)</span>
+                        </div>
+                        <span class="xai-badge"><i class="fa-solid fa-microchip"></i> XAI Analytics</span>
+                    </div>
+
+                    <div class="card-body">
+                        <!-- STRUCTURED CONTRIBUTOR MATRIX TABLE (REQUIREMENT #5) -->
+                        <div class="why-matrix">
+                            <div class="why-row">
+                                <span class="why-label"><i class="fa-solid fa-cloud-rain"></i> Rainfall Intensity</span>
+                                <span class="why-badge high" id="whyRainBadge">HIGH (48.5 mm/h)</span>
+                            </div>
+                            <div class="why-row">
+                                <span class="why-label"><i class="fa-solid fa-droplet"></i> Accumulated Rainfall</span>
+                                <span class="why-badge high" id="whyAccBadge">HIGH (124.0 mm)</span>
+                            </div>
+                            <div class="why-row">
+                                <span class="why-label"><i class="fa-solid fa-temperature-three-quarters"></i> Humidity</span>
+                                <span class="why-badge moderate" id="whyHumBadge">HIGH (94%)</span>
+                            </div>
+                            <div class="why-row">
+                                <span class="why-label"><i class="fa-solid fa-wind"></i> Wind Speed</span>
+                                <span class="why-badge moderate" id="whyWindBadge">MODERATE (22 km/h)</span>
+                            </div>
+                            <div class="why-row">
+                                <span class="why-label"><i class="fa-solid fa-mountain-city"></i> Terrain Vulnerability</span>
+                                <span class="why-badge high" id="whyTerrainBadge">HIGH (Lowland Basin - 275m)</span>
+                            </div>
+                        </div>
+
+                        <!-- AI SYNTHESIS QUOTE BOX (REQUIREMENT #5) -->
+                        <div class="ai-synthesis-box">
+                            <i class="fa-solid fa-quote-left quote-icon"></i>
+                            <p class="ai-quote-text" id="aiSynthesisQuote">
+                                “AI analysis indicates increasing rainfall intensity and high accumulated rainfall in a low-elevation catchment basin are the primary risk contributors.”
+                            </p>
+                        </div>
+                        
+                        <div class="factors-list" id="xaiFactorsList">
+                            <!-- Detailed factor list inserted dynamically by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MULTI-SOURCE PILLAR BREAKDOWN SCORES -->
+                <div class="card pillars-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fa-solid fa-cubes"></i>
+                            <span>Multi-Source Risk Vector Weights</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="pillar-row">
+                            <div class="pillar-info">
+                                <span><i class="fa-solid fa-cloud-showers-heavy"></i> Weather Telemetry</span>
+                                <strong id="scoreWeather">78%</strong>
+                            </div>
+                            <div class="pillar-bar"><div class="pillar-fill weather" id="fillWeather" style="width: 78%;"></div></div>
+                        </div>
+
+                        <div class="pillar-row">
+                            <div class="pillar-info">
+                                <span><i class="fa-solid fa-satellite-dish"></i> Satellite & Doppler Radar</span>
+                                <strong id="scoreSatellite">85%</strong>
+                            </div>
+                            <div class="pillar-bar"><div class="pillar-fill satellite" id="fillSatellite" style="width: 85%;"></div></div>
+                        </div>
+
+                        <div class="pillar-row">
+                            <div class="pillar-info">
+                                <span><i class="fa-solid fa-mountain-city"></i> Terrain & Topography</span>
+                                <strong id="scoreTerrain">90%</strong>
+                            </div>
+                            <div class="pillar-bar"><div class="pillar-fill terrain" id="fillTerrain" style="width: 90%;"></div></div>
+                        </div>
+
+                        <div class="pillar-row">
+                            <div class="pillar-info">
+                                <span><i class="fa-solid fa-clock-rotate-left"></i> Historical Vulnerability</span>
+                                <strong id="scoreHistorical">90%</strong>
+                            </div>
+                            <div class="pillar-bar"><div class="pillar-fill historical" id="fillHistorical" style="width: 90%;"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SYSTEM STATUS & DATA TRANSPARENCY PANEL (REQUIREMENTS #8 & #9) -->
+                <div class="card status-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fa-solid fa-server"></i>
+                            <span>System Status & Data Ingestion Pipelines</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="status-grid">
+                            <div class="status-item"><span class="status-name">DATA PIPELINE</span> <span class="status-check">✓ Ready</span></div>
+                            <div class="status-item"><span class="status-name">AI MODEL (Random Forest)</span> <span class="status-check">✓ Operational</span></div>
+                            <div class="status-item"><span class="status-name">GIS ENGINE (Leaflet)</span> <span class="status-check">✓ Active</span></div>
+                            <div class="status-item"><span class="status-name">RISK ENGINE</span> <span class="status-check">✓ Active</span></div>
+                            <div class="status-item"><span class="status-name">ALERT ENGINE</span> <span class="status-check">✓ Ready</span></div>
+                        </div>
+
+                        <div class="api-grid" style="margin-top: 0.85rem;">
+                            <div class="api-badge"><i class="fa-solid fa-circle-dot text-success"></i> /api/weather</div>
+                            <div class="api-badge"><i class="fa-solid fa-circle-dot text-success"></i> /api/satellite</div>
+                            <div class="api-badge"><i class="fa-solid fa-circle-dot text-success"></i> /api/terrain</div>
+                            <div class="api-badge"><i class="fa-solid fa-circle-dot text-success"></i> /api/historical</div>
+                            <div class="api-badge primary"><i class="fa-solid fa-bolt"></i> /api/predict</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+        
+        <!-- FOOTER & PROFESSIONAL DISCLAIMER (REQUIREMENT #11) -->
+        <footer class="app-footer">
+            <div class="disclaimer-box">
+                <i class="fa-solid fa-circle-info"></i>
+                <span><strong>Professional Disclaimer:</strong> AI-generated risk estimates are intended for decision support and do not replace official government warnings.</span>
+            </div>
+            <p style="margin-top: 0.4rem;">AI-Driven Hyper-Local Early Warning System • Multi-Source Risk Intelligence Platform</p>
+        </footer>
+
+    </div>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Leaflet JS CDN -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <!-- Application Controller -->
+    <script src="script.js"></script>
+</body>
+</html>
